@@ -39,8 +39,9 @@ exports.handler = async function(event) {
   else {
     let returnValue = {
     
-      movies: [],
-      numResults: movies.length
+      numResults: 0,
+      movies: []
+      
     }
 //make a loop to parse through the movie data
     for (let i=0; i < moviesFromCsv.length; i++) {
@@ -54,16 +55,16 @@ exports.handler = async function(event) {
       }
 
   //Conditional statement on how to handle the entry and whether or not to add it to the returned list
-  // Add (push) the post object to the movies array in the returnValue object if the query parameters are present in the movie entry
-      if (imdbEntry.genres.includes(genre) && imdbEntry.releaseYear.includes(year) && imdbEntry.genres !== `//N` && imdbEntry.runtimeMinutes !== `//N`) {
-
-        movies.push(movieEntry)
-      }
-      else {
-
-      }
   
-
+      if (imdbEntry.genres.includes(genre) && imdbEntry.startYear.includes(year) 
+      //exclude movies with zero run time or no genre
+      && imdbEntry.genres !== `//N` && imdbEntry.runtimeMinutes !== `//N`) {
+  // Add (push) the post object to the movies array in the returnValue object if the query parameters are present in the movie entry
+        returnValue.movies.push(movieEntry)
+        returnValue.numResults++
+      }
+      
+      
     }
 
     // a lambda function returns a status code and a string of data from the object created by the search results
